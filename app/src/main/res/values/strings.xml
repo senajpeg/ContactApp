@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MyContacts</string>
+    <string name="contacs">Contacts</string>
+    <string name="search">Search...</string>
+    <string name="phone_number">Phone number : </string>
+    <string name="add_new_contact">Add new contact</string>
+    <string name="name_and_surname">Name and Surname</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_contact">Delete Contact</string>
+    <string name="are_you_sure">Are you sure you want to delete the contact</string>
+    <string name="delete">Delete</string>
+
+
+</resources>
