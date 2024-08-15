@@ -10,6 +10,9 @@
     <string name="delete_contact">Delete Contact</string>
     <string name="are_you_sure">Are you sure you want to delete the contact</string>
     <string name="delete">Delete</string>
+    <string name="edit_Contact">Edit Contact</string>
+    <string name="save">Save</string>
+
 
 
 </resources>

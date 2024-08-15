@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -51,15 +52,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.senaaksoy.mycontacts.roomDbProcess.AddContactDialog
 import com.senaaksoy.mycontacts.roomDbProcess.DeleteContactDialog
+import com.senaaksoy.mycontacts.roomDbProcess.EditContactDialog
 import com.senaaksoy.mycontacts.roomdb.Contact
 import com.senaaksoy.mycontacts.viewModel.ContactViewModel
 
 @Composable
 fun ContactScreen(viewModel: ContactViewModel) {
+
+    val contacts by viewModel.getContacts().observeAsState(emptyList())
+
+    var showDialog by remember { mutableStateOf(false) }
+
     var contactToDelete by remember { mutableStateOf<Contact?>(null) }
     var showDeleteDialog by remember { mutableStateOf(false) }
-    val contacts by viewModel.getContacts().observeAsState(emptyList())
-    var showDialog by remember { mutableStateOf(false) }
+
+    var showEditDialog by remember { mutableStateOf(false) }
+    var contactToEdit by remember { mutableStateOf<Contact?>(null) }
+
     var showSearch by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
@@ -72,14 +81,16 @@ fun ContactScreen(viewModel: ContactViewModel) {
 
 
     Scaffold(
-        topBar = { MyTopAppBar(
+        topBar = {
+            MyTopAppBar(
             onAddContactClick = { showDialog = true },
             onSearchClick = { showSearch = !showSearch }  // when clicking on search icon,show/hide search box
-            ) }
+            )    }
+
     ) {
         paddingValues ->
 
-Column(modifier = Modifier
+        Column(modifier = Modifier
     .padding(paddingValues)
     ) {
     // Search Box
@@ -87,8 +98,7 @@ Column(modifier = Modifier
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             placeholder = { Text(stringResource(id = R.string.search)) }
         )
     }
@@ -96,10 +106,13 @@ Column(modifier = Modifier
             items(filteredContacts) { contact ->
                 ContactItem(
                     contact = contact,
-
                     onDeleteContactClick = {
                         contactToDelete = contact
                         showDeleteDialog = true
+                    },
+                    onEditContactClick = {
+                        contactToEdit=contact
+                        showEditDialog=true
                     }
                 )
                 Divider(color = Color.LightGray, thickness = 2.dp)
@@ -127,6 +140,17 @@ Column(modifier = Modifier
                 }
             )
         }
+        if(showEditDialog && contactToEdit !=null){
+            EditContactDialog(contact = contactToEdit!!,
+                onDismiss = { showEditDialog=false },
+                onEditContact = { name ,phoneNumber ->
+                    val updatedContact =contactToEdit!!.copy(name = name, phoneNumber = phoneNumber)
+                    viewModel.updateContact(updatedContact)
+                    showEditDialog=false
+                    contactToEdit=null
+                }
+                )
+        }
     }
 }
 
@@ -135,9 +159,9 @@ Column(modifier = Modifier
 fun ContactItem(
     contact: Contact,
     modifier: Modifier=Modifier,
-    onDeleteContactClick: (Contact) -> Unit
+    onDeleteContactClick: (Contact) -> Unit,
+    onEditContactClick: (Contact) -> Unit
 ) {
-
     var expanded by remember { mutableStateOf(false) }
     val color by animateColorAsState(
         targetValue = if (expanded)
@@ -160,13 +184,15 @@ fun ContactItem(
                 )
                 .background(color = color)
         ) {
-              Row(modifier = modifier
-                  .fillMaxWidth()
-                  .padding(8.dp)) {
+              Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
                   Text(text = contact.name, fontWeight = FontWeight.Bold)
                   Spacer(Modifier.weight(1f))
+                  IconButton(onClick = { onEditContactClick(contact) }) {
+                      Icon(imageVector = Icons.Filled.Edit,contentDescription = "Edit Contact")
+                      
+                  }
                   IconButton(onClick = { onDeleteContactClick(contact) }) {
-                      Icon(imageVector = Icons.Filled.Delete, contentDescription =null )
+                      Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete Contact" )
 
                   }
               }
@@ -215,12 +241,12 @@ fun MyTopAppBar(onAddContactClick: () -> Unit,onSearchClick: () -> Unit) {
         actions ={
             IconButton(onClick = {onAddContactClick() }) {
                 Icon(imageVector = Icons.Filled.Add,
-                    contentDescription = null
+                    contentDescription = "Add Contact"
                    )
             }
             IconButton(onClick = { onSearchClick() }) {
                 Icon(imageVector = Icons.Filled.Search,
-                    contentDescription = null)
+                    contentDescription = "Search Contact")
 
             }
         },

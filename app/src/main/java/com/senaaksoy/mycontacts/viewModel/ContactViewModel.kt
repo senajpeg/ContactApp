@@ -7,7 +7,7 @@ import com.senaaksoy.mycontacts.roomdb.Contact
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class ContactViewModel(private val repository: Repository) : ViewModel() {
+class ContactViewModel(private val repository: Repository) : ViewModel()  {
 
     val initialContacts = listOf(
         Contact(name = "Alice Johnson", phoneNumber = "530 123 45 67"),
@@ -53,6 +53,11 @@ class ContactViewModel(private val repository: Repository) : ViewModel() {
     fun deleteContact(contact: Contact) {
         viewModelScope.launch {
             repository.delete(contact)
+        }
+    }
+    fun updateContact(contact: Contact) {
+        viewModelScope.launch {
+            repository.updateContact(contact)
         }
     }
 }

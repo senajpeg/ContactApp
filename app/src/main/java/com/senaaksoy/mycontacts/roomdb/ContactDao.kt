@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 //gpt ile düzelen kısım
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,8 @@ interface ContactDao {
 
     @Delete
     suspend fun delete(contact: Contact)
+    @Update
+    suspend fun updateContact(contact: Contact)
 
  @Query("SELECT * FROM contacts ORDER BY name ASC ") //burdaki isim tablo adımızla aynı olmalı..
  //kişilerin isimlerini alfabetik sırıaya göre getircek asc li kısım

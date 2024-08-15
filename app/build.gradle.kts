@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,13 +76,14 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
   //ek  olarak ekledikklerim
+    testImplementation ("com.google.truth:truth:1.1.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.44.2")
+
 
 // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
+   // implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
     // Coroutine components
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    implementation ("androidx.compose.runtime:runtime-livedata:1.4.0")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0" )// veya güncel sürüm
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0") // veya güncel sürüm
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4") // veya güncel sürüm
 }
