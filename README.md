@@ -1,13 +1,17 @@
+MyContacts
+----------
+MyContacts is a simple phone book application. Developed using Kotlin and Jetpack Compose, this application allows users to add, list contacts and view their phone numbers. The application stores data and enables user interactions using Room Database.
 
-MyContacts, basit bir telefon rehberi uygulamasıdır. Kotlin ve Jetpack Compose kullanılarak geliştirilmiş bu uygulama, kullanıcıların kişileri ekleyip, listeleyip, telefon numaralarını görüntülemelerine olanak tanır. Uygulama, Room Database kullanarak verileri saklar ve kullanıcı etkileşimlerini sağlar.
+Features
+--------
+Contact List: You can list contacts retrieved from the database.
+Add Contact: Allows users to add new contacts.
+Phone Number Display: You can view people's phone numbers by clicking.
+Alphabetical Sorting: Contacts are arranged in alphabetical order.
 
-Özellikler
-Kişi Listesi: Veritabanından alınan kişileri listeleyebilirsiniz.
-Kişi Ekleme: Kullanıcıların yeni kişiler eklemesine olanak sağlar.
-Telefon Numarası Gösterimi: Tıklama ile kişilerin telefon numaralarını görüntüleyebilirsiniz.
-Alfabetik Sıralama: Kişiler, alfabetik sıraya göre düzenlenmiştir.
-Teknolojiler
-Kotlin: Android uygulama geliştirme için kullanılan modern bir dil.
-Jetpack Compose: Android UI'ları oluşturmak için kullanılan modern toolkit.
-Room Database: Veritabanı işlemleri için kullanılan yerel bir SQLite kitaplığı.
-LiveData & ViewModel: UI verilerinin yönetimi için kullanılan modern Android bileşenleri
+Technologies
+-----------
+Kotlin: A modern language used for Android application development.
+Jetpack Compose: Modern toolkit for creating Android UIs.
+Room Database: A native SQLite library used for database operations.
+LiveData & ViewModel: Modern Android components used for managing UI data
