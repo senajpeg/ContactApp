@@ -1,4 +1,4 @@
-MyContacts
+MyContacts App Overview
 ----------
 MyContacts is a simple phone book application. Developed using Kotlin and Jetpack Compose, this application allows users to add, list contacts and view their phone numbers. The application stores data and enables user interactions using Room Database.
 
