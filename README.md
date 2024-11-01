@@ -1,3 +1,13 @@
+![Logo](https://github.com/senajpeg/ContactApp/blob/main/contacts1.png?raw=true)
+![Logo](https://github.com/senajpeg/ContactApp/blob/main/contacts2.png?raw=true)
+![Logo](https://github.com/senajpeg/ContactApp/blob/main/contact3.png?raw=true)
+![Logo](https://github.com/senajpeg/ContactApp/blob/main/contact4.png?raw=true)
+
+
+
+
+
+
 MyContacts App Overview
 ----------
 MyContacts is a simple phone book application. Developed using Kotlin and Jetpack Compose, this application allows users to add, list contacts and view their phone numbers. The application stores data and enables user interactions using Room Database.
