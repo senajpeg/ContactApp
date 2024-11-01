@@ -12,6 +12,10 @@
     <string name="delete">Delete</string>
     <string name="edit_Contact">Edit Contact</string>
     <string name="save">Save</string>
+    <string name="recent_calls">Recent Calls</string>
+    <string name="ok">Ok</string>
+    <string name="contact.db">contact.db</string>
+    <string name="EditContact">Edit Contact</string>
 
 
 

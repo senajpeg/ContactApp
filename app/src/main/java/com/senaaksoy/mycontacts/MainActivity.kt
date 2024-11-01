@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
             ContactDatabase::class.java,
         name="contact.db").build()
     }
+
     private val viewModel by viewModels<ContactViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {

@@ -1,5 +1,6 @@
 package com.senaaksoy.mycontacts.viewModel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -30,6 +31,17 @@ class ContactViewModel(private val repository: Repository) : ViewModel()  {
         Contact(name = "Florence Green", phoneNumber = "537 210 98 76"),
 
         )
+
+
+    private val _recentCalls = mutableStateListOf<String>()
+    val recentCalls: List<String> get() = _recentCalls
+
+    fun addRecentCall(contactName: String) {
+        _recentCalls.add(contactName)
+        if (_recentCalls.size > 20) {
+            _recentCalls.removeAt(0)
+        }
+    }
 
 
     init {

@@ -20,9 +20,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -72,6 +77,10 @@ fun ContactScreen(viewModel: ContactViewModel) {
     var showSearch by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
+    var showRecentCallsDialog by remember { mutableStateOf(false) }
+
+    val recentCalls by remember { mutableStateOf(viewModel.recentCalls) }
+
     // filtered list
     val filteredContacts = contacts.filter { contact ->
         contact.name.contains(searchQuery, ignoreCase = true)
@@ -84,14 +93,13 @@ fun ContactScreen(viewModel: ContactViewModel) {
         topBar = {
             MyTopAppBar(
             onAddContactClick = { showDialog = true },
-            onSearchClick = { showSearch = !showSearch }  // when clicking on search icon,show/hide search box
+            onSearchClick = { showSearch = !showSearch } ,
+                onRecentCallsClick = {showRecentCallsDialog=true}// when clicking on search icon,show/hide search box
             )    }
 
     ) {
         paddingValues ->
-
-        Column(modifier = Modifier
-    .padding(paddingValues)
+        Column(modifier = Modifier.padding(paddingValues)
     ) {
     // Search Box
     if (showSearch) {
@@ -113,7 +121,8 @@ fun ContactScreen(viewModel: ContactViewModel) {
                     onEditContactClick = {
                         contactToEdit=contact
                         showEditDialog=true
-                    }
+                    },
+                    onPhoneCallClick = {viewModel.addRecentCall(contact.name)}
                 )
                 Divider(color = Color.LightGray, thickness = 2.dp)
             }
@@ -151,6 +160,24 @@ fun ContactScreen(viewModel: ContactViewModel) {
                 }
                 )
         }
+        if (showRecentCallsDialog) {
+            AlertDialog(
+                onDismissRequest = { showRecentCallsDialog = false },
+                title = { Text(text = stringResource(id = R.string.recent_calls)) },
+                text = {
+                    Column {
+                       recentCalls.forEach { call ->
+                            Text(text = call, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showRecentCallsDialog = false }) {
+                        Text(text= stringResource(id = R.string.ok))
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -160,7 +187,8 @@ fun ContactItem(
     contact: Contact,
     modifier: Modifier=Modifier,
     onDeleteContactClick: (Contact) -> Unit,
-    onEditContactClick: (Contact) -> Unit
+    onEditContactClick: (Contact) -> Unit,
+    onPhoneCallClick:()->Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val color by animateColorAsState(
@@ -184,25 +212,27 @@ fun ContactItem(
                 )
                 .background(color = color)
         ) {
-              Row(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+              Row(modifier = modifier
+                  .fillMaxWidth()
+                  .padding(8.dp)) {
                   Text(text = contact.name, fontWeight = FontWeight.Bold)
                   Spacer(Modifier.weight(1f))
                   IconButton(onClick = { onEditContactClick(contact) }) {
-                      Icon(imageVector = Icons.Filled.Edit,contentDescription = "Edit Contact")
+                      Icon(imageVector = Icons.Filled.Edit,contentDescription = null)
                       
                   }
                   IconButton(onClick = { onDeleteContactClick(contact) }) {
-                      Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete Contact" )
-
+                      Icon(imageVector = Icons.Filled.Delete, contentDescription =null )
                   }
+
               }
             if (expanded) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text =  (stringResource(id = R.string.phone_number))+contact.phoneNumber, modifier = modifier.padding(4.dp))
                     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Imageicon(imageicon = R.drawable.phone_call)
-                        Imageicon(imageicon = R.drawable.circle)
-                        Imageicon(imageicon = R.drawable.video_call)
+                        Imageicon(onClick = {onPhoneCallClick()}, imageicon = R.drawable.phone_call)
+                        Imageicon(onClick = {}, imageicon = R.drawable.circle)
+                        Imageicon(onClick = {}, imageicon = R.drawable.video_call)
                     }
 
                 }
@@ -214,20 +244,23 @@ fun ContactItem(
 @Composable
 fun Imageicon(
     @DrawableRes imageicon : Int,
+    onClick: ()->Unit,
     modifier: Modifier=Modifier
 ){
     Image( modifier = modifier
         .padding(12.dp)
         .size(32.dp)
         .clip(MaterialTheme.shapes.small)
-        .clickable { },
+        .clickable { onClick() },
         painter = painterResource(imageicon),
         contentDescription =null)
 
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(onAddContactClick: () -> Unit,onSearchClick: () -> Unit) {
+fun MyTopAppBar(onAddContactClick: () -> Unit,
+                onSearchClick: () -> Unit,
+                onRecentCallsClick: () -> Unit) {
     TopAppBar(
         title =
         {
@@ -241,13 +274,17 @@ fun MyTopAppBar(onAddContactClick: () -> Unit,onSearchClick: () -> Unit) {
         actions ={
             IconButton(onClick = {onAddContactClick() }) {
                 Icon(imageVector = Icons.Filled.Add,
-                    contentDescription = "Add Contact"
+                    contentDescription = null
                    )
             }
             IconButton(onClick = { onSearchClick() }) {
                 Icon(imageVector = Icons.Filled.Search,
-                    contentDescription = "Search Contact")
+                    contentDescription = null)
 
+            }
+            IconButton(onClick = { onRecentCallsClick() }) {
+                Icon(imageVector = Icons.Filled.Phone, contentDescription = null)
+                
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF171E44),
